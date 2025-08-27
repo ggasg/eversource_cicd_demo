@@ -2,29 +2,25 @@ import pytest
 from pyspark.sql.types import StructField, StructType, IntegerType, StringType, DateType
 from pyspark.sql import SparkSession
 from databricks.connect import DatabricksSession
+from databricks.sdk.core import Config
+from src.gg_spark_wheel.main import process_devices
 
-from src.gg_spark_wheel.main import main
-
-def start_spark(app_name="Tests"):
-    spark_builder = (
-        SparkSession
-        .builder
-        .appName(app_name))
-
-    spark_sess = spark_builder.getOrCreate()
-    return spark_sess
-
+#TODO - The Cluster ID should be parameterized or obtained from the bundle (would that be possible at all?)
 @pytest.fixture(scope="session")
 def spark():
+    config = Config(
+    profile    = "DEFAULT",
+    cluster_id = "0707-183655-c0cqjuw9"
+    )
     try:
-        spark = DatabricksSession.builder.getOrCreate()
+        spark = DatabricksSession.builder.sdkConfig(config).getOrCreate()
         yield spark
         spark.stop()
     except Exception as e:
         print(f"Failed to create DatabricksSession: {e}")
 
 
-def test_main_package():
+def test_main_package(spark):
     expected_schema = StructType([
         StructField("chip_id", IntegerType(), True),
         StructField("chip_name", StringType(), True),
@@ -33,5 +29,4 @@ def test_main_package():
         StructField("last_service_date", DateType(), True),
         StructField("chip_status", StringType(), True),
     ])
-    assert main() == expected_schema
-    assert "chicha" == "Chachi"
+    assert process_devices(spark).schema == expected_schema

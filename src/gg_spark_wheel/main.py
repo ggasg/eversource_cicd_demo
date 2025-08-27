@@ -1,5 +1,5 @@
 from pyspark.sql.types import StructField, StructType, IntegerType, FloatType, ArrayType, StringType, DateType
-from pyspark.sql import SparkSession
+from pyspark.sql import SparkSession, DataFrame
 from datetime import date
 
 devices_schema = StructType([
@@ -17,11 +17,23 @@ sample_devices = [
   (3741, "SPX 2000", 4, "Yamaha", date.fromisoformat("2011-10-31"), "DECOMISSIONED")
 ]
 
-def main(spark: SparkSession):
-    device_lookup_df = spark.createDataFrame(sample_devices, schema=devices_schema)
-    device_lookup_df.show()
-    return device_lookup_df.schema
-    # device_lookup_df.write.mode("overwrite").saveAsTable("gguitarts_own_cat.home_temp.sensor_chip_lookup_dab")
+def get_spark() -> SparkSession:
+    try:
+        from databricks.connect import DatabricksSession
 
+        return DatabricksSession.builder.getOrCreate()
+    except ImportError:
+        return SparkSession.builder.getOrCreate()
+
+def process_devices(spark: SparkSession) -> DataFrame:
+    device_lookup_df = spark.createDataFrame(sample_devices, schema=devices_schema)
+    # device_lookup_df.write.mode("overwrite").saveAsTable("gguitarts_own_cat.home_temp.sensor_chip_lookup_dab")
+    return device_lookup_df
+
+def main():
+    process_devices(get_spark()).show()
+    
+
+    
 if __name__ == "__main__":
-    main(spark)
+    main()

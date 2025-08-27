@@ -1,15 +1,47 @@
-[tool.poetry]
+[project]
 name = "gg_spark_wheel"
 version = "0.0.1"
 description = "Testing"
-authors = ["GG gaston.guitart@databricks.com"]
+authors = [
+    { name="Gaston Guitart", email="gaston.guitart@databricks.com" },
+]
+requires-python = ">= 3.11"
 
-[tool.poetry.dependencies]
-python = "^3.11.11"
+[project.optional-dependencies]
+dev = [
+    "pytest",
+
+    # Code completion support for Lakeflow Declarative Pipelines, also install databricks-connect
+    "databricks-dlt",
+
+    # databricks-connect can be used to run parts of this project locally.
+    # See https://docs.databricks.com/dev-tools/databricks-connect.html.
+    #
+    # Note, databricks-connect is automatically installed if you're using Databricks
+    # extension for Visual Studio Code
+    # (https://docs.databricks.com/dev-tools/vscode-ext/dev-tasks/databricks-connect.html).
+    #
+    # To manually install databricks-connect, uncomment the line below to install a version
+    # of db-connect that corresponds to the Databricks Runtime version used for this project.
+    # See https://docs.databricks.com/dev-tools/databricks-connect.html
+    # "databricks-connect{{template "latest_lts_db_connect_version_spec"}}",
+]
+
+[tool.pytest.ini_options]
+pythonpath = "src"
+testpaths = [
+    "tests",
+]
+addopts = [
+    "--import-mode=importlib",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.poetry.scripts]
+[tool.hatch.build.targets.wheel]
+packages = ["src/gg_spark_wheel"]
+
+[project.scripts]
 main = "gg_spark_wheel.main:main"

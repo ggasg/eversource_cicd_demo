@@ -1,0 +1,1 @@
+from gg_spark_wheel import main

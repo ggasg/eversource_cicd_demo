@@ -14,8 +14,8 @@ targets:
     default: true
     workspace:
       host: https://adb-984752964297111.11.azuredatabricks.net
-      root_path: /Workspace/Users/gaston.guitart@databricks.com/eversource_demo/.bundle/${bundle.name}/${bundle.target}
-      file_path: /Workspace/Users/gaston.guitart@databricks.com/dlt-home-iot/
+      root_path: /Workspace/Users/gaston.guitart@databricks.com/Customer ASQs/eversource_cicd_demo/.bundle/${bundle.name}/${bundle.target}
+      file_path: /Workspace/Users/gaston.guitart@databricks.com/Customer ASQs/eversource_cicd_demo
 
   ## Optionally, there could be 'staging' or 'prod' targets here.
   #

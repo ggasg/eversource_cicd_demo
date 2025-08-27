@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "gg_spark_wheel"
+version = "0.0.1"
+description = "Testing"
+authors = ["GG gaston.guitart@databricks.com"]
+
+[tool.poetry.dependencies]
+python = "^3.11.11"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+main = "gg_spark_wheel.main:main"

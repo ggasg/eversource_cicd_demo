@@ -1,0 +1,42 @@
+resources:
+  jobs:
+    gguitart_all_bronze:
+      name: gguitart_all_bronze
+      
+      trigger:
+       periodic:
+         interval: 5
+         unit: WEEKS
+
+      email_notifications:
+       on_failure:
+         - gaston.guitart@databricks.com
+
+      tasks:
+        - task_key: refresh_pipeline
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.load_static.id}
+
+        - task_key: load_static_tables
+          depends_on:
+            - task_key: refresh_pipeline
+          notebook_task:
+            notebook_path: ../src/pipelines/x_static_table_silver.ipynb
+
+        - task_key: wheel_job_1
+          run_job_task:
+            job_id: ${resources.jobs.wheel-job.id}
+
+      parameters:
+        - name: catalog
+          default: ${var.catalog_name}
+        - name: schema
+          default: ${var.schema_name}
+
+
+      job_clusters:
+        - job_cluster_key: job_cluster
+          new_cluster:
+            spark_version: 15.4.x-scala2.12
+            node_type_id: Standard_D3_v2
+            data_security_mode: SINGLE_USER

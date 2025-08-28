@@ -8,6 +8,14 @@ bundle:
 include:
   - resources/*.yml
 
+variables:
+  catalog_name:
+    description: "Just my catalog name"
+    default: "gguitarts_own_cat"
+  schema_name:
+    description: "Just my schema name"
+    default: "home_iot"
+
 targets:
   dev:
     mode: development

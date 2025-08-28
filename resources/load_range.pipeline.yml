@@ -1,0 +1,14 @@
+# The main pipeline for gguitart_home_iot
+resources:
+  pipelines:
+    load_static:
+      name: gguitart_load_range
+      libraries:
+        - notebook:
+            path: ../src/pipelines/Streaming_SQL.ipynb
+
+      development: true
+      photon: true
+      catalog: ${var.catalog_name}
+      schema: ${var.schema_name}
+      serverless: true

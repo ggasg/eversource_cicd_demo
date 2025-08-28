@@ -16,6 +16,7 @@ resources:
         - task_key: refresh_pipeline
           pipeline_task:
             pipeline_id: ${resources.pipelines.load_static.id}
+            
 
         - task_key: load_static_tables
           depends_on:

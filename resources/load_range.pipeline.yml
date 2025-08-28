@@ -1,4 +1,4 @@
-# The main pipeline for gguitart_home_iot
+# The main pipeline for loading data out of a range object
 resources:
   pipelines:
     load_static:
@@ -6,9 +6,13 @@ resources:
       libraries:
         - notebook:
             path: ../src/pipelines/Streaming_SQL.ipynb
+      configuration:
+        catalog_name: "${var.catalog_name}"
+        schema_name: "${var.schema_name}"
 
       development: true
       photon: true
+      serverless: true
+      # We need these two whenever we specify serverless compute
       catalog: ${var.catalog_name}
       schema: ${var.schema_name}
-      serverless: true
